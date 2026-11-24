@@ -7,6 +7,11 @@ android {
     namespace = "ru.caola.apla"
     compileSdk = 35
 
+    // BuildConfig.DEBUG is used to allow local HTTP endpoints in debug builds.
+    buildFeatures {
+        buildConfig = true
+    }
+
     // Keep Java, Kotlin and KAPT bytecode targets aligned.
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
