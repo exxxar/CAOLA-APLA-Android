@@ -163,7 +163,7 @@ class SettingsActivity : BaseActivity() {
             })
         }
         text("Источники включаются независимо. Передача контекстных событий на сервер выполняется только после согласия пользователя.", 12f)
-        action("Войти / зарегистрироваться", AuthActivity::class.java)
+        action("Войти в аккаунт", LoginActivity::class.java)
         action("Открыть отладку", DebugActivity::class.java)
     }
 

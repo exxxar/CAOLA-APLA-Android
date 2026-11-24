@@ -83,3 +83,18 @@ The Android module compiles both Java and Kotlin bytecode for JVM 17. This match
 - Backend на том же Android-устройстве: `http://127.0.0.1:8000`
 
 Телефон и компьютер должны находиться в одной локальной сети; сервер должен слушать не только `127.0.0.1`, но и LAN-интерфейс (`0.0.0.0`), а входящий порт должен быть разрешён брандмауэром. HTTP использовать только в доверенной тестовой сети.
+
+
+### Диагностика авторизации (v0.1.3)
+
+При неуспешном входе Debug-журнал показывает HTTP-код, фактический URL запроса `auth/login` и текст ответа сервера. Пароль и тело отправленного запроса в журнал не записываются. Это помогает отличить неверные учётные данные от подключения к другой базе данных или экземпляру Backend.
+
+## Authentication screens (v0.1.4)
+
+- `LoginActivity` contains only email and password fields.
+- `RegisterActivity` is a separate screen with display name, email, password and password confirmation.
+- Navigation between the screens is explicit; registration is no longer embedded in the login form.
+- Authentication failures log the request URL and server response body, but never the submitted password.
+- `X-App-Version` is populated from the actual Gradle `BuildConfig.VERSION_NAME`.
+
+If the local administrator signs in successfully in Admin Desktop but receives HTTP 401 on Android, compare the exact Backend URL configured in Admin Desktop with Android's Base URL. The Android emulator address `http://10.0.2.2:8000` should reach the same host machine service as desktop `http://127.0.0.1:8000`, provided both clients use the same port and Backend process. The login route and JSON fields are the same in both clients (`POST /api/v1/auth/login`, `email`, `password`). A 401 from this route means the Backend did not find the account or did not verify the supplied password; a role restriction would be a separate authorization check after login.

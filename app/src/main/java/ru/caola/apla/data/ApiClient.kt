@@ -30,7 +30,7 @@ object ApiClient {
                 .header("Accept", "application/json")
                 .header("X-Request-ID", UUID.randomUUID().toString())
                 .header("X-Client-Platform", "android")
-                .header("X-App-Version", "0.1.0")
+                .header("X-App-Version", BuildConfig.VERSION_NAME)
             val token = session.accessToken
             val path = original.url.encodedPath
             val isPublicAuthCall = path.endsWith("/auth/login") || path.endsWith("/auth/register") || path.endsWith("/auth/refresh")
