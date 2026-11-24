@@ -11,6 +11,8 @@ import ru.caola.apla.data.AppMode
 import ru.caola.apla.data.DemoRepository
 import ru.caola.apla.data.DemoState
 import ru.caola.apla.data.DebugLog
+import com.google.gson.JsonObject
+import com.google.gson.JsonElement
 
 class DashboardActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,30 +62,33 @@ class DashboardActivity : BaseActivity() {
                     return@launch
                 }
                 val data = response.body() ?: throw IllegalStateException("Пустой ответ dashboard")
-                val profile = data.getAsJsonObject("profile")
-                val metrics = data.getAsJsonObject("metrics")
-                val recommendation = data.getAsJsonObject("recommendation")
+                // API may return null for optional sections until the user has data.
+                // Never call getAsJsonObject() directly on a nullable JsonElement:
+                // Gson throws ClassCastException when the value is JsonNull.
+                val profile = data.objectOrNull("profile")
+                val metrics = data.objectOrNull("metrics")
+                val recommendation = data.objectOrNull("recommendation")
                 root.removeViews(0, root.childCount)
                 title("Личный кабинет", "Данные получены от сервера")
                 card {
                     cardText(this, "ВАША ЦЕЛЬ", 10f, mint, true)
-                    cardText(this, profile?.get("goal")?.asString ?: "Учебная цель не задана", 17f, white, true)
-                    cardText(this, "${profile?.get("target_language")?.asString ?: "Язык не выбран"} · ${profile?.get("level")?.asString ?: "Уровень не указан"}", 12f, muted)
+                    cardText(this, profile.stringOr("goal", "Учебная цель не задана"), 17f, white, true)
+                    cardText(this, "${profile.stringOr("target_language", "Язык не выбран")} · ${profile.stringOr("level", "Уровень не указан")}", 12f, muted)
                 }
                 val metricCard = card { orientation = LinearLayout.HORIZONTAL }
                 listOf(
-                    Pair("${metrics?.get("streak_days")?.asInt ?: 0} дн.", "серия"),
-                    Pair("${metrics?.get("weekly_minutes")?.asInt ?: 0} мин", "за неделю"),
-                    Pair("${metrics?.get("mastered_items")?.asInt ?: 0}", "освоено")
+                    Pair("${metrics.intOr("streak_days")} дн.", "серия"),
+                    Pair("${metrics.intOr("weekly_minutes")} мин", "за неделю"),
+                    Pair("${metrics.intOr("mastered_items")}", "освоено")
                 ).forEach { (value, label) ->
                     val col = LinearLayout(this@DashboardActivity).apply { orientation = LinearLayout.VERTICAL; layoutParams = LinearLayout.LayoutParams(0, -2, 1f) }
                     metric(col, value, label); metricCard.addView(col)
                 }
                 section("Рекомендация CAOLA")
                 card {
-                    cardText(this, recommendation?.get("title")?.asString ?: "Нет активной рекомендации", 19f, white, true)
-                    cardText(this, "${recommendation?.get("duration_minutes")?.asInt ?: 0} минут · ${recommendation?.get("due_reviews")?.asInt ?: 0} элементов на повторение", 12f, muted)
-                    cardText(this, recommendation?.get("reason")?.asString ?: "Сервер пока не сформировал рекомендацию", 13f)
+                    cardText(this, recommendation.stringOr("title", "Нет активной рекомендации"), 19f, white, true)
+                    cardText(this, "${recommendation.intOr("duration_minutes")} минут · ${recommendation.intOr("due_reviews")} элементов на повторение", 12f, muted)
+                    cardText(this, recommendation.stringOr("reason", "Сервер пока не сформировал рекомендацию"), 13f)
                 }
                 section("Разделы")
                 action("Каталог обучения", LessonCatalogActivity::class.java)
@@ -98,5 +103,22 @@ class DashboardActivity : BaseActivity() {
                 DebugLog.add("ERROR", "Dashboard API: ${e.stackTraceToString()}")
             }
         }
+    }
+
+    private fun JsonObject?.stringOr(key: String, fallback: String): String {
+        val value: JsonElement = this?.get(key) ?: return fallback
+        if (value.isJsonNull || !value.isJsonPrimitive || !value.asJsonPrimitive.isString) return fallback
+        return runCatching { value.asString }.getOrDefault(fallback).ifBlank { fallback }
+    }
+
+    private fun JsonObject?.intOr(key: String, fallback: Int = 0): Int {
+        val value: JsonElement = this?.get(key) ?: return fallback
+        if (value.isJsonNull || !value.isJsonPrimitive) return fallback
+        return runCatching { value.asInt }.getOrDefault(fallback)
+    }
+
+    private fun JsonObject.objectOrNull(key: String): JsonObject? {
+        val value = get(key) ?: return null
+        return if (value.isJsonObject) value.asJsonObject else null
     }
 }
