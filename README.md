@@ -98,3 +98,11 @@ The Android module compiles both Java and Kotlin bytecode for JVM 17. This match
 - `X-App-Version` is populated from the actual Gradle `BuildConfig.VERSION_NAME`.
 
 If the local administrator signs in successfully in Admin Desktop but receives HTTP 401 on Android, compare the exact Backend URL configured in Admin Desktop with Android's Base URL. The Android emulator address `http://10.0.2.2:8000` should reach the same host machine service as desktop `http://127.0.0.1:8000`, provided both clients use the same port and Backend process. The login route and JSON fields are the same in both clients (`POST /api/v1/auth/login`, `email`, `password`). A 401 from this route means the Backend did not find the account or did not verify the supplied password; a role restriction would be a separate authorization check after login.
+
+
+## Версия 0.1.5 (Android v5.3.6)
+
+- Исправлен разбор `GET /api/v1/progress/summary`: `weekly_minutes` обрабатывается как массив объектов с полем `minutes`, а темы — по полям `title` и `mastery` согласно контракту Backend.
+- Добавлена совместимость с прежним форматом массива чисел и альтернативными полями `name` / `mastery_percent`.
+- Числовые и строковые значения обрабатываются безопасно при `null` или отсутствии поля.
+- При первом открытии настроек сохраняется адрес по умолчанию, чтобы переход ко входу не приводил к пустому API endpoint.

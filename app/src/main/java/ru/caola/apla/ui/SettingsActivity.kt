@@ -35,6 +35,9 @@ class SettingsActivity : BaseActivity() {
         section("Адрес сервера")
         text("Базовый URL (домен без /api/v1)", 12f)
         val defaultBaseUrl = if (BuildConfig.DEBUG) "http://10.0.2.2:8000" else "https://api.example.com"
+        // Persist a safe default when the user opens Settings and immediately proceeds to Login.
+        // This prevents ApiClient from being initialized with an empty endpoint.
+        if (session.apiBaseUrl.isBlank()) session.apiBaseUrl = defaultBaseUrl
         val baseUrl = field(defaultBaseUrl, session.apiBaseUrl.ifBlank { defaultBaseUrl }).apply {
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI
         }
