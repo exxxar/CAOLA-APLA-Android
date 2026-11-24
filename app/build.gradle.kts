@@ -6,6 +6,16 @@ plugins {
 android {
     namespace = "ru.caola.apla"
     compileSdk = 35
+
+    // Keep Java, Kotlin and KAPT bytecode targets aligned.
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
     defaultConfig {
         applicationId = "ru.caola.apla"
         minSdk = 26

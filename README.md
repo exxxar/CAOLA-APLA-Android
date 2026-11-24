@@ -68,3 +68,6 @@ Build → Build Bundle(s) / APK(s) → Build APK(s).
 - Сервер обязан проверять права, владельца ресурса, согласия, идемпотентность и структуру входных данных независимо от клиента.
 
 OpenAPI 3.1-описание маршрутов для импорта в Swagger Editor / генераторы документации находится в `docs/openapi.yaml`. Подробные примеры тел запросов и ответов — в `docs/API_CONTRACT.md`; рекомендуемая раскладка FastAPI — в `docs/FASTAPI_ROUTE_LAYOUT.md`.
+### JVM target compatibility
+
+The Android module compiles both Java and Kotlin bytecode for JVM 17. This matches the JDK 17 configured in GitHub Actions and prevents the Java 1.8 / Kotlin 17 target mismatch during KAPT stub generation.
