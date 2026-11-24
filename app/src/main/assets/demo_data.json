@@ -1,0 +1,325 @@
+{
+  "profile": {
+    "name": "Демо-пользователь",
+    "native_language": "Русский",
+    "target_language": "Английский",
+    "level": "A2",
+    "goal": "Разговорная практика",
+    "daily_minutes": 15
+  },
+  "dashboard": {
+    "streak": 5,
+    "weekly_minutes": 68,
+    "mastered": 124,
+    "due_reviews": 8,
+    "recommendation": "Есть подходящее окно для короткого занятия",
+    "recommendation_reason": "Свободный интервал по расписанию; уверенность 86%",
+    "lesson_title": "В кафе: заказ напитка",
+    "lesson_minutes": 7
+  },
+  "vocabulary": [
+    {
+      "word": "Could I have…?",
+      "translation": "Можно мне…?",
+      "example": "Could I have a cup of tea?",
+      "status": "Повторить",
+      "topic": "В кафе"
+    },
+    {
+      "word": "receipt",
+      "translation": "чек",
+      "example": "Can I have the receipt, please?",
+      "status": "Изучается",
+      "topic": "В кафе"
+    },
+    {
+      "word": "still water",
+      "translation": "вода без газа",
+      "example": "A bottle of still water, please.",
+      "status": "Освоено",
+      "topic": "В кафе"
+    },
+    {
+      "word": "menu",
+      "translation": "меню",
+      "example": "Could I see the menu?",
+      "status": "Освоено",
+      "topic": "В кафе"
+    },
+    {
+      "word": "Could you repeat that?",
+      "translation": "Не могли бы вы повторить?",
+      "example": "Sorry, could you repeat that?",
+      "status": "Повторить",
+      "topic": "Общение"
+    },
+    {
+      "word": "How much is it?",
+      "translation": "Сколько это стоит?",
+      "example": "How much is it altogether?",
+      "status": "Изучается",
+      "topic": "Покупки"
+    },
+    {
+      "word": "appointment",
+      "translation": "встреча / запись",
+      "example": "I have an appointment at ten.",
+      "status": "Новое",
+      "topic": "Повседневная жизнь"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "cafe",
+      "title": "В кафе: заказ напитка",
+      "level": "A2",
+      "minutes": 7,
+      "description": "Научимся вежливо заказывать напитки и уточнять детали заказа.",
+      "exercises": [
+        {
+          "type": "Выбор ответа",
+          "question": "Как вежливо попросить чашку чая?",
+          "options": [
+            "I want tea.",
+            "Could I have a cup of tea?",
+            "Give tea."
+          ],
+          "answer": 1,
+          "explanation": "Could I have…? — вежливая конструкция просьбы.",
+          "item": "Вежливые просьбы"
+        },
+        {
+          "type": "Перевод",
+          "question": "Переведите: «Можно мне меню, пожалуйста?»",
+          "answer_text": "Could I have the menu, please?",
+          "explanation": "Используем Could I have…? и please.",
+          "item": "Вежливые просьбы"
+        },
+        {
+          "type": "Заполнение пропуска",
+          "question": "Could I ___ a bottle of water?",
+          "options": [
+            "have",
+            "has",
+            "having"
+          ],
+          "answer": 0,
+          "explanation": "После модального could используется начальная форма глагола.",
+          "item": "Модальные глаголы"
+        }
+      ]
+    },
+    {
+      "id": "directions",
+      "title": "Как спросить дорогу",
+      "level": "A2",
+      "minutes": 6,
+      "description": "Отработаем вопросы о местоположении и направлениях.",
+      "exercises": [
+        {
+          "type": "Выбор ответа",
+          "question": "Как спросить, где находится вокзал?",
+          "options": [
+            "Where is the station?",
+            "What station is?",
+            "Where station are?"
+          ],
+          "answer": 0,
+          "explanation": "В вопросе о местоположении используем Where is…?",
+          "item": "Вопросы о местоположении"
+        },
+        {
+          "type": "Перевод",
+          "question": "Переведите: «Идите прямо»",
+          "answer_text": "Go straight ahead.",
+          "explanation": "Straight ahead означает «прямо вперед».",
+          "item": "Направления"
+        }
+      ]
+    }
+  ],
+  "listening": {
+    "title": "Короткий разговор в кафе",
+    "instruction": "Прослушайте фразу и выберите, что заказал посетитель.",
+    "text": "Could I have a cup of coffee and a glass of water, please?",
+    "question": "Что заказал посетитель?",
+    "options": [
+      "Чай и сок",
+      "Кофе и воду",
+      "Кофе и молоко"
+    ],
+    "answer": 1,
+    "explanation": "В реплике звучит a cup of coffee and a glass of water."
+  },
+  "dialogue": {
+    "title": "Диалог: заказ в кафе",
+    "turns": [
+      {
+        "speaker": "Бариста",
+        "text": "Hello! What would you like?",
+        "translation": "Здравствуйте! Что желаете?",
+        "options": [
+          "I'd like a cup of tea, please.",
+          "I am tea yesterday.",
+          "Where tea?"
+        ],
+        "answer": 0
+      },
+      {
+        "speaker": "Бариста",
+        "text": "Would you like anything to eat?",
+        "translation": "Хотите что-нибудь поесть?",
+        "options": [
+          "No, thank you. Just a drink.",
+          "I eating now.",
+          "At the table."
+        ],
+        "answer": 0
+      },
+      {
+        "speaker": "Бариста",
+        "text": "Anything else?",
+        "translation": "Что-нибудь ещё?",
+        "options": [
+          "That's all, thank you.",
+          "Yesterday is fine.",
+          "I have blue."
+        ],
+        "answer": 0
+      }
+    ]
+  },
+  "progress": {
+    "completion": 72,
+    "weekly": [
+      12,
+      18,
+      8,
+      15,
+      5,
+      10,
+      0
+    ],
+    "topics": [
+      {
+        "name": "Лексика",
+        "value": 84
+      },
+      {
+        "name": "Грамматика",
+        "value": 63
+      },
+      {
+        "name": "Аудирование",
+        "value": 48
+      },
+      {
+        "name": "Разговорная практика",
+        "value": 71
+      }
+    ],
+    "history": [
+      {
+        "date": "Сегодня, 10:20",
+        "title": "Повторение слов",
+        "result": "8 из 10",
+        "minutes": 5
+      },
+      {
+        "date": "Вчера, 18:40",
+        "title": "В кафе: заказ напитка",
+        "result": "3 из 3",
+        "minutes": 7
+      },
+      {
+        "date": "22 ноября, 12:15",
+        "title": "Грамматика A2",
+        "result": "7 из 10",
+        "minutes": 9
+      }
+    ]
+  },
+  "caola": {
+    "candidate_windows": [
+      {
+        "id": "w1",
+        "time": "12:30",
+        "duration": "5 минут",
+        "format": "Карточки",
+        "score": 0.91,
+        "reason": "Короткий перерыв по пользовательскому расписанию",
+        "risk": "Низкий"
+      },
+      {
+        "id": "w2",
+        "time": "18:45",
+        "duration": "10 минут",
+        "format": "Диалог",
+        "score": 0.86,
+        "reason": "Подходящее вечернее окно",
+        "risk": "Низкий"
+      },
+      {
+        "id": "w3",
+        "time": "21:00",
+        "duration": "7 минут",
+        "format": "Повторение",
+        "score": 0.74,
+        "reason": "Возможное окно перед периодом тишины",
+        "risk": "Средний"
+      }
+    ]
+  },
+  "apla": {
+    "priority_items": [
+      {
+        "name": "Вежливые просьбы",
+        "priority": 0.92,
+        "reason": "Ошибки в последних упражнениях",
+        "level": 0.42,
+        "due": "Сегодня"
+      },
+      {
+        "name": "Предлоги места",
+        "priority": 0.76,
+        "reason": "Приближается срок повторения",
+        "level": 0.61,
+        "due": "Завтра"
+      },
+      {
+        "name": "Еда и напитки",
+        "priority": 0.63,
+        "reason": "Низкая стабильность воспроизведения",
+        "level": 0.73,
+        "due": "Через 2 дня"
+      }
+    ]
+  },
+  "context": {
+    "schedule": "12:00–13:00 — перерыв; 18:00–19:00 — свободное окно",
+    "activity": "Низкая активность за последние 20 минут (демо-сценарий)",
+    "quiet_hours": "22:00–08:00",
+    "sources": [
+      {
+        "name": "Расписание пользователя",
+        "enabled": true,
+        "description": "Пользовательские интервалы занятости"
+      },
+      {
+        "name": "История занятий",
+        "enabled": true,
+        "description": "Привычная длительность и реакция на рекомендации"
+      },
+      {
+        "name": "Физическая активность",
+        "enabled": false,
+        "description": "Демо-признак активности, без реального датчика"
+      },
+      {
+        "name": "Календарь",
+        "enabled": false,
+        "description": "Интеграция будет добавлена отдельно"
+      }
+    ]
+  }
+}

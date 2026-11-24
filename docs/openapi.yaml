@@ -1,0 +1,559 @@
+openapi: 3.1.0
+info:
+  title: CAOLA / APLA REST API
+  version: 1.0.0
+  description: Контракт мобильного Android-клиента. Подробные JSON-примеры и правила
+    см. API_CONTRACT.md.
+servers:
+- url: https://api.example.com/api/v1
+security:
+- BearerAuth: []
+paths:
+  /auth/register:
+    post:
+      summary: Регистрация пользователя
+      operationId: post_auth_register
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObject'
+  /auth/login:
+    post:
+      summary: Вход пользователя
+      operationId: post_auth_login
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObject'
+  /auth/refresh:
+    post:
+      summary: Обновление пары токенов
+      operationId: post_auth_refresh
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObject'
+  /auth/logout:
+    post:
+      summary: Завершение сессии
+      operationId: post_auth_logout
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+  /profile:
+    get:
+      summary: Получить профиль
+      operationId: get_profile
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+    patch:
+      summary: Изменить профиль
+      operationId: patch_profile
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObject'
+  /onboarding:
+    get:
+      summary: Получить справочники и настройки onboarding
+      operationId: get_onboarding
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+  /onboarding/complete:
+    post:
+      summary: Сохранить onboarding
+      operationId: post_onboarding_complete
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObject'
+  /learning/dashboard:
+    get:
+      summary: Получить данные главного экрана
+      operationId: get_learning_dashboard
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+  /learning/trajectory:
+    get:
+      summary: Получить индивидуальную учебную траекторию
+      operationId: get_learning_trajectory
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+  /learning/recommendation:
+    get:
+      summary: Получить рекомендацию CAOLA
+      operationId: get_learning_recommendation
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+  /learning/recommendation/{id}/decision:
+    post:
+      summary: Сохранить решение пользователя по рекомендации
+      operationId: post_learning_recommendation_id_decision
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+      parameters:
+      - &id002
+        name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObject'
+  /context/events:
+    post:
+      summary: Передать разрешённые контекстные события
+      operationId: post_context_events
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObject'
+      parameters:
+      - &id001
+        name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Ключ идемпотентности для безопасного повтора запроса
+  /context/settings:
+    get:
+      summary: Получить настройки источников контекста
+      operationId: get_context_settings
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+    patch:
+      summary: Изменить настройки источников контекста
+      operationId: patch_context_settings
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObject'
+  /lessons/start:
+    post:
+      summary: Начать учебную сессию
+      operationId: post_lessons_start
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObject'
+      parameters:
+      - *id001
+  /lessons/{id}:
+    get:
+      summary: Получить содержание учебной сессии
+      operationId: get_lessons_id
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+      parameters:
+      - *id002
+  /lessons/{id}/answers:
+    post:
+      summary: Передать ответ на упражнение
+      operationId: post_lessons_id_answers
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+      parameters:
+      - *id002
+      - *id001
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObject'
+  /lessons/{id}/complete:
+    post:
+      summary: Завершить учебную сессию
+      operationId: post_lessons_id_complete
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+      parameters:
+      - *id002
+      - *id001
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObject'
+  /progress/summary:
+    get:
+      summary: Получить сводку прогресса
+      operationId: get_progress_summary
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+  /progress/history:
+    get:
+      summary: Получить историю результатов
+      operationId: get_progress_history
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+      - name: page_size
+        in: query
+        schema:
+          type: integer
+          default: 20
+      - name: from
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: to
+        in: query
+        schema:
+          type: string
+          format: date-time
+  /review/queue:
+    get:
+      summary: Получить очередь повторения APLA
+      operationId: get_review_queue
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+  /sync:
+    post:
+      summary: Синхронизировать локальные события
+      operationId: post_sync
+      responses:
+        '200':
+          description: Успешный JSON-ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericObject'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenericObject'
+      parameters:
+      - *id001
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    GenericObject:
+      type: object
+      additionalProperties: true
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+            request_id:
+              type: string
+          required:
+          - code
+          - message
+  responses:
+    Unauthorized:
+      description: Нет действительной авторизации
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: Ошибка валидации
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
