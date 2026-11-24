@@ -14,8 +14,9 @@ import kotlinx.coroutines.launch
 import ru.caola.apla.data.ApiClient
 import ru.caola.apla.data.AppMode
 import ru.caola.apla.data.DebugLog
+import ru.caola.apla.data.NetworkEndpointPolicy
+import ru.caola.apla.BuildConfig
 import java.io.IOException
-import java.net.URI
 
 class SettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,12 +34,18 @@ class SettingsActivity : BaseActivity() {
 
         section("Адрес сервера")
         text("Базовый URL (домен без /api/v1)", 12f)
-        val baseUrl = field("https://api.example.com", session.apiBaseUrl).apply {
+        val defaultBaseUrl = if (BuildConfig.DEBUG) "http://10.0.2.2:8000" else "https://api.example.com"
+        val baseUrl = field(defaultBaseUrl, session.apiBaseUrl.ifBlank { defaultBaseUrl }).apply {
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI
         }
         text("Префикс API", 12f)
         val apiPrefix = field("/api/v1", session.apiPathPrefix)
         text("Итоговый адрес: ${session.apiRoot().ifBlank { "не задан" }}", 11f)
+        if (BuildConfig.DEBUG) {
+            text("Локальная разработка: эмулятор Android → http://10.0.2.2:8000; физический телефон → http://IP_КОМПЬЮТЕРА:8000 (например, 192.168.1.50). Компьютер и телефон должны быть в одной Wi-Fi сети. HTTP разрешён только для локальных адресов в debug-сборке.", 11f)
+        } else {
+            text("Для публичного сервера используйте HTTPS.", 11f)
+        }
 
         section("Авторизация")
         text("Access token", 12f)
@@ -71,8 +78,13 @@ class SettingsActivity : BaseActivity() {
             val connect = connectTimeout.text.toString().toIntOrNull()
             val read = readTimeout.text.toString().toIntOrNull()
             val selectedMode = if (modeSpinner.selectedItemPosition == 1) AppMode.PRODUCTION else AppMode.DEMO
-            if (selectedMode == AppMode.PRODUCTION && !isValidBaseUrl(url)) {
-                Toast.makeText(this, "Для серверного режима укажите корректный HTTPS-адрес", Toast.LENGTH_LONG).show(); return false
+            if (selectedMode == AppMode.PRODUCTION && !NetworkEndpointPolicy.isAllowed(url, BuildConfig.DEBUG)) {
+                val message = if (BuildConfig.DEBUG) {
+                    "Укажите HTTPS или локальный HTTP-адрес: 10.0.2.2, localhost либо IP компьютера в локальной сети"
+                } else {
+                    "Для релизной версии укажите корректный HTTPS-адрес"
+                }
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show(); return false
             }
             if (!isValidPrefix(prefix)) {
                 Toast.makeText(this, "Префикс должен начинаться с / и не содержать пробелов", Toast.LENGTH_LONG).show(); return false
@@ -154,11 +166,6 @@ class SettingsActivity : BaseActivity() {
         action("Войти / зарегистрироваться", AuthActivity::class.java)
         action("Открыть отладку", DebugActivity::class.java)
     }
-
-    private fun isValidBaseUrl(value: String): Boolean = try {
-        val uri = URI(value)
-        uri.scheme == "https" && !uri.host.isNullOrBlank() && uri.userInfo == null && uri.query == null && uri.fragment == null
-    } catch (_: Exception) { false }
 
     private fun isValidPrefix(value: String): Boolean = value.startsWith("/") && !value.contains(" ") && !value.contains("?") && !value.contains("#")
 }

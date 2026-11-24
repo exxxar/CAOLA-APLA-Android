@@ -1,6 +1,7 @@
 package ru.caola.apla.data
 
 import android.content.Context
+import ru.caola.apla.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -11,7 +12,13 @@ import java.util.concurrent.TimeUnit
 object ApiClient {
     fun create(context: Context, session: SessionStore = SessionStore(context)): ApiService {
         val root = session.apiRoot().trimEnd('/')
-        require(root.startsWith("https://")) { "Для Production требуется HTTPS-адрес API" }
+        require(NetworkEndpointPolicy.isAllowed(root, BuildConfig.DEBUG)) {
+            if (BuildConfig.DEBUG) {
+                "Для тестирования по HTTP используйте localhost, 10.0.2.2 или локальный IP компьютера (10.x, 172.16–31.x, 192.168.x). Публичные адреса должны использовать HTTPS."
+            } else {
+                "Для релизной версии требуется HTTPS-адрес API"
+            }
+        }
         val baseUrl = "$root/"
         val authInterceptor = Interceptor { chain ->
             val original = chain.request()
