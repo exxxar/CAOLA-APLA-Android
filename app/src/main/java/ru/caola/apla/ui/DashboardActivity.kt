@@ -23,7 +23,7 @@ class DashboardActivity : BaseActivity() {
         title("Привет, ${profile.optString("name").substringBefore(" ")}!", "Продолжим учиться небольшими шагами")
         card { cardText(this,"ВАША ЦЕЛЬ",10f,mint,true); cardText(this,profile.optString("goal"),17f,white,true); cardText(this,"${profile.optString("target_language")}  ·  ${profile.optString("level")}  ·  ${profile.optInt("daily_minutes")} минут в день",12f,muted) }
         val metrics=card { orientation=LinearLayout.HORIZONTAL }
-        listOf(Triple("${dash.optInt("streak")} дн.","серия"),Triple("${dash.optInt("weekly_minutes")} мин","за неделю"),Triple("${dash.optInt("mastered")}","освоено")).forEach { (v,l) -> val col=LinearLayout(this).apply { orientation=LinearLayout.VERTICAL; layoutParams=LinearLayout.LayoutParams(0,-2,1f) }; metric(col,v,l); metrics.addView(col) }
+        listOf(Pair("${dash.optInt("streak")} дн.","серия"),Pair("${dash.optInt("weekly_minutes")} мин","за неделю"),Pair("${dash.optInt("mastered")}","освоено")).forEach { (v,l) -> val col=LinearLayout(this).apply { orientation=LinearLayout.VERTICAL; layoutParams=LinearLayout.LayoutParams(0,-2,1f) }; metric(col,v,l); metrics.addView(col) }
         section("Рекомендация на сейчас")
         card { cardText(this,"✦  CAOLA ПРЕДЛАГАЕТ",10f,mint,true); cardText(this,dash.optString("lesson_title"),20f,white,true); cardText(this,"${dash.optInt("lesson_minutes")} минут  ·  ${dash.optInt("due_reviews")} элемента на повторение",12f,muted); cardText(this,dash.optString("recommendation_reason"),13f) }
         primary("Начать занятие  →") { startActivity(Intent(this,LessonActivity::class.java)) }

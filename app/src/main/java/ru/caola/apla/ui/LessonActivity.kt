@@ -34,6 +34,7 @@ class LessonActivity : BaseActivity() {
     private var serverOptionIds = emptyList<String>()
     private var serverAnswerSubmitted = false
     private var serverExerciseStartedAt = 0L
+    private var pendingCompleteBody: JsonObject? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
