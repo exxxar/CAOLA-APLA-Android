@@ -11,14 +11,18 @@ import java.util.concurrent.TimeUnit
 
 object ApiClient {
     fun create(context: Context, session: SessionStore = SessionStore(context)): ApiService {
-        val root = session.apiRoot().trimEnd('/')
-        require(NetworkEndpointPolicy.isAllowed(root, BuildConfig.DEBUG)) {
+        // Validate only the server origin. The API prefix (for example /api/v1)
+        // is a legitimate Retrofit base path and must not be rejected by the
+        // host/scheme security policy.
+        val serverBase = session.apiBaseUrl.trim().trimEnd('/')
+        require(NetworkEndpointPolicy.isAllowed(serverBase, BuildConfig.DEBUG)) {
             if (BuildConfig.DEBUG) {
                 "Для тестирования по HTTP используйте localhost, 10.0.2.2 или локальный IP компьютера (10.x, 172.16–31.x, 192.168.x). Публичные адреса должны использовать HTTPS."
             } else {
                 "Для релизной версии требуется HTTPS-адрес API"
             }
         }
+        val root = session.apiRoot().trimEnd('/')
         val baseUrl = "$root/"
         val authInterceptor = Interceptor { chain ->
             val original = chain.request()
