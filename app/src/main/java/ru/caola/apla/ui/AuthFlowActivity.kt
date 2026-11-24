@@ -33,8 +33,13 @@ abstract class AuthFlowActivity : BaseActivity() {
                     session.mode = AppMode.PRODUCTION
                     status.text = "Успешно"
                     DebugLog.add("INFO", if (register) "Пользователь зарегистрирован" else "Вход выполнен")
-                    Toast.makeText(this@AuthFlowActivity, "Успешно. Загружаем кабинет.", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@AuthFlowActivity, DashboardActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP))
+                    val profileResponse = runCatching { repository.profile() }.getOrNull()
+                    val onboardingCompleted = profileResponse?.takeIf { it.isSuccessful }
+                        ?.body()?.get("onboarding_completed")?.let { !it.isJsonNull && it.asBoolean } ?: true
+                    val nextScreen = if (onboardingCompleted) DashboardActivity::class.java else OnboardingActivity::class.java
+                    val nextMessage = if (onboardingCompleted) "Загружаем кабинет." else "Сначала настроим обучение."
+                    Toast.makeText(this@AuthFlowActivity, "Успешно. $nextMessage", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@AuthFlowActivity, nextScreen).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP))
                     finish()
                 } else {
                     val requestUrl = response.raw().request.url.toString()

@@ -106,3 +106,11 @@ If the local administrator signs in successfully in Admin Desktop but receives H
 - Добавлена совместимость с прежним форматом массива чисел и альтернативными полями `name` / `mastery_percent`.
 - Числовые и строковые значения обрабатываются безопасно при `null` или отсутствии поля.
 - При первом открытии настроек сохраняется адрес по умолчанию, чтобы переход ко входу не приводил к пустому API endpoint.
+
+
+## v0.1.6 — CAOLA recommendation empty state and server onboarding
+
+- The CAOLA screen now handles `{ "recommendation": null }` explicitly. It explains whether onboarding is required or the server lacks enough context evidence, instead of showing a misleading missing-ID error.
+- Login/registration checks the server profile and routes users with incomplete onboarding to the onboarding form.
+- Production onboarding is saved through `POST /api/v1/onboarding/complete`; demo mode remains local.
+- CAOLA remains conservative: no recommendation is fabricated when context confidence is insufficient. Real context events and user-granted sources are still required for a time recommendation.

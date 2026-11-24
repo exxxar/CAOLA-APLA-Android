@@ -50,7 +50,31 @@ class CaolaActivity : BaseActivity() {
                 val response = ApiRepository(this@CaolaActivity).recommendation()
                 if (!response.isSuccessful) { status.text = "Не удалось получить рекомендацию: HTTP ${response.code()}"; return@launch }
                 val data = response.body() ?: throw IllegalStateException("Пустой ответ recommendation")
-                val rec = if (data.has("recommendation") && data.get("recommendation").isJsonObject) data.getAsJsonObject("recommendation") else data
+                val recommendationElement = data.get("recommendation")
+                if (data.has("recommendation") && (recommendationElement == null || recommendationElement.isJsonNull)) {
+                    val reason = data.get("reason")?.takeIf { it.isJsonPrimitive && !it.isJsonNull }?.asString.orEmpty()
+                    root.removeAllViews()
+                    title("CAOLA", "Контекстно-адаптивное планирование")
+                    card {
+                        cardText(this, "ПОКА НЕТ РЕКОМЕНДАЦИИ", 10f, mint, true)
+                        if (reason == "onboarding_required") {
+                            cardText(this, "Сначала завершите настройку обучения", 19f, white, true)
+                            cardText(this, "CAOLA нужны изучаемый язык, текущий уровень, цель и желаемая длительность занятий. Сейчас профиль ещё не настроен.", 13f, muted)
+                        } else {
+                            cardText(this, "Недостаточно контекстных данных", 19f, white, true)
+                            cardText(this, "Сервер пока не располагает достаточными подтверждёнными данными, чтобы предложить время занятия. Это штатное поведение: алгоритм не должен угадывать, когда вы свободны.", 13f, muted)
+                            cardText(this, "После завершения настройки профиля и поступления разрешённых контекстных событий рекомендация появится автоматически.", 13f)
+                        }
+                    }
+                    if (reason == "onboarding_required") primary("Настроить обучение") {
+                        startActivity(android.content.Intent(this@CaolaActivity, OnboardingActivity::class.java))
+                    }
+                    secondary("Проверить снова") { recreate() }
+                    action("Открыть журнал отладки", DebugActivity::class.java)
+                    DebugLog.add("INFO", "CAOLA: сервер не вернул рекомендацию; reason=${reason.ifBlank { "not_provided" }}")
+                    return@launch
+                }
+                val rec = if (recommendationElement != null && recommendationElement.isJsonObject) recommendationElement.asJsonObject else data
                 root.removeAllViews(); title("CAOLA", "Рекомендация получена от сервера")
                 card { cardText(this, "КОНТЕКСТНОЕ ПРЕДЛОЖЕНИЕ", 10f, mint, true); cardText(this, rec.get("title")?.asString ?: "Учебное окно", 20f, white, true); cardText(this, "${rec.get("window_start")?.asString ?: "Время уточняется"} · ${rec.get("duration_minutes")?.asInt ?: 0} минут · ${rec.get("format")?.asString ?: "Формат не указан"}", 12f, muted); progress(this, "Оценка уместности", ((rec.get("score")?.asDouble ?: 0.0) * 100).toInt()); cardText(this, rec.get("reason")?.asString ?: "Сервер не вернул пояснение", 13f) }
                 text("Рекомендация не запускает урок автоматически. Выберите действие.", 12f)
